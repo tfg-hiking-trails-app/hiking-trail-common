@@ -1,6 +1,5 @@
 ﻿using Common.Application.Extensions;
 using Common.Domain.Entities;
-using Common.Domain.Exceptions;
 using Common.Domain.Filter;
 using Common.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -41,28 +40,18 @@ public abstract class AbstractRepository<TEntity> : IRepository<TEntity> where T
 
     public virtual async Task AddAsync(TEntity entity)
     {
-        entity.Code = Guid.NewGuid();
-        
         Entity.Add(entity);
         await DbContext.SaveChangesAsync();
     }
 
-    public virtual async Task UpdateAsync(Guid code, TEntity entity)
+    public virtual async Task UpdateAsync(TEntity entity)
     {
-        if (!Entity.Any(e => e.Code.Equals(code))) 
-            throw new NotFoundEntityException(nameof(TEntity), code);
-        
         Entity.Update(entity);
         await DbContext.SaveChangesAsync();
     }
 
-    public virtual async Task DeleteAsync(Guid code)
-    {
-        var entity = Entity.FirstOrDefault(e => e.Code.Equals(code));
-        
-        if (entity is null) 
-            throw new NotFoundEntityException(nameof(TEntity), code);
-        
+    public virtual async Task DeleteAsync(TEntity entity)
+    { 
         Entity.Remove(entity);
         await DbContext.SaveChangesAsync();
     }

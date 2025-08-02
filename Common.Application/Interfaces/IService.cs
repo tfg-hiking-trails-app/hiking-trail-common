@@ -13,9 +13,9 @@ public interface IService<TEntityDto, TCreateEntityDto, TUpdateEntityDto>
     
     Task<TEntityDto> GetByCodeAsync(Guid code);
     
-    Task<Guid> CreateAsync(TCreateEntityDto entity);
+    Task<Guid> CreateAsync(TCreateEntityDto createEntityDto);
     
-    Task<Guid> UpdateAsync(TUpdateEntityDto entity);
+    Task<Guid> UpdateAsync(Guid code, TUpdateEntityDto updateEntityDto);
     
     Task DeleteAsync(Guid code);
 }
