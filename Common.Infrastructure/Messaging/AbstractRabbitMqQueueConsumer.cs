@@ -57,4 +57,14 @@ public abstract class AbstractRabbitMqQueueConsumer : IRabbitMqQueueConsumer
         return await tcs.Task;
     }
     
+    protected string GetUsingEnvironmentVariable(string environmentVariableName)
+    {
+        string? result = Environment.GetEnvironmentVariable(environmentVariableName);
+        
+        if (string.IsNullOrEmpty(result))
+            throw new Exception($"Environment variable {environmentVariableName} not found");
+        
+        return result;
+    }
+    
 }

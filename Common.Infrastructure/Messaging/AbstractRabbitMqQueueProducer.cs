@@ -26,4 +26,15 @@ public abstract class AbstractRabbitMqQueueProducer : IRabbitMqQueueProducer
         
         await channel.BasicPublishAsync(ExchangeName, QueueName, body);
     }
+    
+    protected string GetUsingEnvironmentVariable(string environmentVariableName)
+    {
+        string? result = Environment.GetEnvironmentVariable(environmentVariableName);
+        
+        if (string.IsNullOrEmpty(result))
+            throw new Exception($"Environment variable {environmentVariableName} not found");
+        
+        return result;
+    }
+    
 }
