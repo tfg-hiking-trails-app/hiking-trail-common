@@ -2,5 +2,8 @@
 
 public interface IRabbitMqQueueConsumer
 {
-    Task<T> BasicConsumeAsync<T>(string routingKey);
+    string QueueName { get; }
+    string ExchangeName { get; }
+    Task<T> BasicConsumeAsync<T>();
+    Task<T> BasicConsumeAsync<T>(string queueName);
 }
