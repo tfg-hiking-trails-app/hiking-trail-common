@@ -14,13 +14,8 @@ public abstract class AbstractRabbitMqQueueProducer : IRabbitMqQueueProducer
     
     public abstract string QueueName { get; }
     public abstract string ExchangeName { get; }
-    
-    public async Task BasicPublishAsync(byte[] body)
-    {
-        await BasicPublishAsync(QueueName, body);
-    }
 
-    public async Task BasicPublishAsync(string routingKey, byte[] body)
+    public async Task BasicPublishAsync(byte[] body)
     {
         IChannel channel = await _channelProvider.GetChannelAsync(ExchangeName, QueueName);
         
