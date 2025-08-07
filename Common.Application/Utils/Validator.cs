@@ -13,6 +13,12 @@ public static class Validator
         if (string.IsNullOrEmpty(argument))
             throw new ArgumentNullException(field);
     }
+    
+    public static void CheckNullArgument(object? argument, string field)
+    {
+        if (argument is null)
+            throw new ArgumentNullException(field);
+    }
 
     public static void CheckPositiveValue(double value, string field)
     {
