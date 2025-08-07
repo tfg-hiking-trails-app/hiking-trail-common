@@ -63,7 +63,8 @@ public abstract class AbstractService<TEntity, TEntityDto, TCreateEntityDto, TUp
         
         TEntity entity = Mapper.Map<TEntity>(createEntityDto);
         
-        entity.Code = Guid.NewGuid();
+        if (entity.Code == Guid.Empty)
+            entity.Code = Guid.NewGuid();
 
         await Repository.AddAsync(entity);
 
