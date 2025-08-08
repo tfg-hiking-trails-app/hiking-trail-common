@@ -28,7 +28,16 @@ public abstract class AbstractController<TDto, TCreateDto, TUpdateDto, TEntityDt
     
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public virtual async Task<ActionResult<Page<TDto>>> Get(
+    public virtual async Task<ActionResult<Page<TDto>>> GetAll()
+    {
+        IEnumerable<TEntityDto> page = await _service.GetAllAsync();
+        
+        return Ok(_mapper.Map<IEnumerable<TDto>>(page));
+    }
+    
+    [HttpGet("paged")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public virtual async Task<ActionResult<Page<TDto>>> GetPaged(
         CancellationToken cancellationToken,
         [FromQuery] int pageNumber = Pagination.PageNumber,
         [FromQuery] int pageSize = Pagination.PageSize,
