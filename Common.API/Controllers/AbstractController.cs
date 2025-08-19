@@ -15,24 +15,24 @@ namespace Common.API.Controllers;
 public abstract class AbstractController<TDto, TCreateDto, TUpdateDto, TEntityDto, TCreateEntityDto, TUpdateEntityDto> 
     : ControllerBase
 {
-    private readonly IService<TEntityDto, TCreateEntityDto, TUpdateEntityDto> _service;
-    private readonly IMapper _mapper;
+    protected readonly IService<TEntityDto, TCreateEntityDto, TUpdateEntityDto> Service;
+    protected readonly IMapper Mapper;
 
     protected AbstractController(
         IService<TEntityDto, TCreateEntityDto, TUpdateEntityDto> service, 
         IMapper mapper)
     {
-        _service = service;
-        _mapper = mapper;
+        Service = service;
+        Mapper = mapper;
     }
     
     [HttpGet("all")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public virtual async Task<ActionResult<IEnumerable<TDto>>> GetAll()
     {
-        IEnumerable<TEntityDto> page = await _service.GetAllAsync();
+        IEnumerable<TEntityDto> page = await Service.GetAllAsync();
         
-        return Ok(_mapper.Map<IEnumerable<TDto>>(page));
+        return Ok(Mapper.Map<IEnumerable<TDto>>(page));
     }
     
     [HttpGet]
@@ -46,10 +46,10 @@ public abstract class AbstractController<TDto, TCreateDto, TUpdateDto, TEntityDt
     {
         FilterDto filter = new FilterDto(pageNumber, pageSize, sortField, sortDirection);
         
-        Page<TEntityDto> page = await _service
-            .GetPagedAsync(_mapper.Map<FilterEntityDto>(filter), cancellationToken);
+        Page<TEntityDto> page = await Service
+            .GetPagedAsync(Mapper.Map<FilterEntityDto>(filter), cancellationToken);
         
-        return Ok(_mapper.Map<Page<TDto>>(page));
+        return Ok(Mapper.Map<Page<TDto>>(page));
     }
     
     [HttpGet("{code:guid}")]
@@ -60,9 +60,9 @@ public abstract class AbstractController<TDto, TCreateDto, TUpdateDto, TEntityDt
     {
         try
         {
-            TEntityDto entityDto = await _service.GetByCodeAsync(code);
+            TEntityDto entityDto = await Service.GetByCodeAsync(code);
 
-            return Ok(_mapper.Map<TDto>(entityDto));
+            return Ok(Mapper.Map<TDto>(entityDto));
         }
         catch (NotFoundEntityException ex)
         {
@@ -82,9 +82,9 @@ public abstract class AbstractController<TDto, TCreateDto, TUpdateDto, TEntityDt
     {
         try
         {
-            TCreateEntityDto createEntityDto = _mapper.Map<TCreateEntityDto>(createDto);
+            TCreateEntityDto createEntityDto = Mapper.Map<TCreateEntityDto>(createDto);
         
-            Guid code = await _service.CreateAsync(createEntityDto);
+            Guid code = await Service.CreateAsync(createEntityDto);
 
             string actionName = nameof(GetByCode);
             
@@ -108,9 +108,9 @@ public abstract class AbstractController<TDto, TCreateDto, TUpdateDto, TEntityDt
     {
         try
         {
-            TUpdateEntityDto updateEntityDto = _mapper.Map<TUpdateEntityDto>(updateDto);
+            TUpdateEntityDto updateEntityDto = Mapper.Map<TUpdateEntityDto>(updateDto);
 
-            return Ok(await _service.UpdateAsync(code, updateEntityDto));
+            return Ok(await Service.UpdateAsync(code, updateEntityDto));
         }
         catch (NotFoundEntityException ex)
         {
@@ -130,7 +130,7 @@ public abstract class AbstractController<TDto, TCreateDto, TUpdateDto, TEntityDt
     {
         try
         {
-            await _service.DeleteAsync(code);
+            await Service.DeleteAsync(code);
             
             return NoContent();
         }

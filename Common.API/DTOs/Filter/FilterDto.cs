@@ -1,9 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Common.API.Utils;
 
 namespace Common.API.DTOs.Filter;
 
 public record FilterDto
 {
+    public FilterDto()
+    {
+        PageNumber = Pagination.PageNumber;
+        PageSize = Pagination.PageSize;
+        SortField = Pagination.SortField;
+        SortDirection = Pagination.SortDirection;
+    }
+    
     public FilterDto(int pageNumber, int pageSize, string? sortField, string sortDirection)
     {
         PageNumber = pageNumber;
