@@ -1,77 +1,18 @@
 ﻿using AutoMapper;
-using Common.API.DTOs.Filter;
-using Common.API.Utils;
-using Common.Application.DTOs.Filter;
 using Common.Application.Interfaces;
-using Common.Application.Pagination;
 using Common.Domain.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Common.API.Controllers;
 
-[ApiController]
-[Produces("application/json")]
-public abstract class AbstractController<TDto, TCreateDto, TUpdateDto, TEntityDto, TCreateEntityDto, TUpdateEntityDto> 
-    : ControllerBase
+public abstract class AbstractCrudController<TDto, TCreateDto, TUpdateDto, TEntityDto, TCreateEntityDto, TUpdateEntityDto> 
+    : AbstractReadController<TDto, TCreateDto, TUpdateDto, TEntityDto, TCreateEntityDto, TUpdateEntityDto>
 {
-    protected readonly IService<TEntityDto, TCreateEntityDto, TUpdateEntityDto> Service;
-    protected readonly IMapper Mapper;
-
-    protected AbstractController(
+    protected AbstractCrudController(
         IService<TEntityDto, TCreateEntityDto, TUpdateEntityDto> service, 
-        IMapper mapper)
+        IMapper mapper) : base(service, mapper)
     {
-        Service = service;
-        Mapper = mapper;
-    }
-    
-    [HttpGet("all")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public virtual async Task<ActionResult<IEnumerable<TDto>>> GetAll()
-    {
-        IEnumerable<TEntityDto> page = await Service.GetAllAsync();
-        
-        return Ok(Mapper.Map<IEnumerable<TDto>>(page));
-    }
-    
-    [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public virtual async Task<ActionResult<Page<TDto>>> GetPaged(
-        CancellationToken cancellationToken,
-        [FromQuery] int pageNumber = Pagination.PageNumber,
-        [FromQuery] int pageSize = Pagination.PageSize,
-        [FromQuery] string sortField = Pagination.SortField,
-        [FromQuery] string sortDirection = Pagination.SortDirection)
-    {
-        FilterDto filter = new FilterDto(pageNumber, pageSize, sortField, sortDirection);
-        
-        Page<TEntityDto> page = await Service
-            .GetPagedAsync(Mapper.Map<FilterEntityDto>(filter), cancellationToken);
-        
-        return Ok(Mapper.Map<Page<TDto>>(page));
-    }
-    
-    [HttpGet("{code:guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public virtual async Task<ActionResult<TDto>> GetByCode(Guid code)
-    {
-        try
-        {
-            TEntityDto entityDto = await Service.GetByCodeAsync(code);
-
-            return Ok(Mapper.Map<TDto>(entityDto));
-        }
-        catch (NotFoundEntityException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
     }
     
     [HttpPost]
