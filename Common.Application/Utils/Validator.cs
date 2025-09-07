@@ -2,6 +2,20 @@
 
 public static class Validator
 {
+    public static readonly HashSet<string> ValidContentTypeImage = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+    {
+        "image/png",
+        "image/jpg",
+        "image/jpeg",
+    };
+    
+    public static readonly HashSet<string> ValidExtensionsImage = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+    {
+        ".png",
+        ".jpg",
+        ".jpeg"
+    };
+    
     public static void CheckGuid(Guid code)
     {
         if (code == Guid.Empty)
@@ -31,4 +45,5 @@ public static class Validator
         if (value < 0)
             throw new ArgumentOutOfRangeException(field);
     }
+    
 }

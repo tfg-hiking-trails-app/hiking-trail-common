@@ -91,7 +91,7 @@ public abstract class AbstractService<TEntity, TEntityDto, TCreateEntityDto, TUp
     
     protected abstract void CheckDataValidity(TCreateEntityDto createEntityDto);
     
-    private async Task<TEntity> GetEntity(Guid code)
+    protected async Task<TEntity> GetEntity(Guid code)
     {
         if (code == Guid.Empty)
             throw new ArgumentNullException(nameof(code));

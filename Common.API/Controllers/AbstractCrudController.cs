@@ -41,7 +41,7 @@ public abstract class AbstractCrudController<TDto, TCreateDto, TUpdateDto, TEnti
         }
     }
     
-    [HttpPut("{code:guid}")]
+    [HttpPatch("{code:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
