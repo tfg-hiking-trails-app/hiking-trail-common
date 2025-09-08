@@ -11,4 +11,15 @@ public class TokenManager : ITokenManager
         
         return handler.ReadJwtToken(token).Payload;
     }
+
+    public string? GetUserCodeFromJwt(string token)
+    {
+        return GetPayloadFromJwt(token)["userCode"].ToString();
+    }
+
+    public string? GetUsernameFromJwt(string token)
+    {
+        return GetPayloadFromJwt(token)["username"].ToString();
+    }
+    
 }
