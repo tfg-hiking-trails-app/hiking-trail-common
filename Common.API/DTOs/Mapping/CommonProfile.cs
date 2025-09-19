@@ -17,11 +17,11 @@ public class CommonProfile : Profile
         CreateMap<IFormFile, FileEntityDto>().ConvertUsing(src => MapFile(src));
     }
     
-    private FileEntityDto MapFile(IFormFile file)
+    private FileEntityDto MapFile(IFormFile? file)
     {
-        if (file is null)
-            throw new ArgumentNullException(nameof(file), "ActivityFile is null");
-                
+        if (file == null)
+            return new FileEntityDto();
+        
         using Stream stream = file.OpenReadStream();
         using MemoryStream memoryStream = new MemoryStream();
                 

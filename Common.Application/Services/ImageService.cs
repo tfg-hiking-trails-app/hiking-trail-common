@@ -39,6 +39,28 @@ public class ImageService : IImageService
         return jsonResult["secure_url"]?.ToString() ?? throw new InvalidOperationException("secure_url not exists");
     }
 
+    public async Task RemoveImage(string imageId)
+    {
+        DeletionParams deletionParams = new DeletionParams(imageId)
+        {
+            ResourceType = ResourceType.Image
+        };
+        
+        await _cloudinary.DestroyAsync(deletionParams);
+    }
+
+    public string GetPublicIdFromUrl(string url)
+    {
+        Uri uri = new Uri(url);
+        string[] segments = uri.AbsolutePath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+
+        string fileName = segments.Last();
+        string folderPath = string.Join("/", segments.Skip(segments.ToList().IndexOf("upload") + 1).SkipLast(1));
+
+        return Path.Combine(folderPath, Path.GetFileNameWithoutExtension(fileName))
+            .Replace("\\", "/");
+    }
+
     private void CheckImageFile(FileEntityDto fileEntityDto)
     {
         if (fileEntityDto.Length == 0)

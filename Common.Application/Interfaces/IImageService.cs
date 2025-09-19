@@ -3,4 +3,6 @@
 public interface IImageService
 {
     Task<string> UploadImage(FileEntityDto fileEntityDto);
+    Task RemoveImage(string imageId);
+    string GetPublicIdFromUrl(string url);
 }
