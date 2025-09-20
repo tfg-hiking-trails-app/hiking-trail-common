@@ -12,7 +12,7 @@ namespace Common.API.Controllers;
 
 [ApiController]
 [Produces("application/json")]
-public abstract class AbstractReadController<TDto, TCreateDto, TUpdateDto, TEntityDto, TCreateEntityDto, TUpdateEntityDto> 
+public abstract class AbstractReadController<TDto, TEntityDto, TCreateEntityDto, TUpdateEntityDto> 
     : ControllerBase
 {
     protected readonly IService<TEntityDto, TCreateEntityDto, TUpdateEntityDto> Service;
@@ -30,9 +30,9 @@ public abstract class AbstractReadController<TDto, TCreateDto, TUpdateDto, TEnti
     [ProducesResponseType(StatusCodes.Status200OK)]
     public virtual async Task<ActionResult<IEnumerable<TDto>>> GetAll()
     {
-        IEnumerable<TEntityDto> page = await Service.GetAllAsync();
+        IEnumerable<TEntityDto> list = await Service.GetAllAsync();
         
-        return Ok(Mapper.Map<IEnumerable<TDto>>(page));
+        return Ok(Mapper.Map<IEnumerable<TDto>>(list));
     }
     
     [HttpGet]

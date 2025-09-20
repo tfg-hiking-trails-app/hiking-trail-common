@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Common.API.Controllers;
 
 public abstract class AbstractCrudController<TDto, TCreateDto, TUpdateDto, TEntityDto, TCreateEntityDto, TUpdateEntityDto> 
-    : AbstractReadController<TDto, TCreateDto, TUpdateDto, TEntityDto, TCreateEntityDto, TUpdateEntityDto>
+    : AbstractReadController<TDto, TEntityDto, TCreateEntityDto, TUpdateEntityDto>
 {
     protected AbstractCrudController(
         IService<TEntityDto, TCreateEntityDto, TUpdateEntityDto> service, 
