@@ -27,9 +27,13 @@ public abstract class AbstractCrudController<TDto, TCreateDto, TUpdateDto, TEnti
         
             Guid code = await Service.CreateAsync(createEntityDto);
 
+            TEntityDto entityDto = await Service.GetByCodeAsync(code);
+            
+            TDto dto = Mapper.Map<TDto>(entityDto);
+            
             string actionName = nameof(GetByCode);
             
-            return CreatedAtAction(actionName, new { code }, new { Code = code });
+            return CreatedAtAction(actionName, new { code }, dto);
         }
         catch (EntityAlreadyExistsException ex)
         {
