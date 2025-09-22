@@ -6,11 +6,11 @@ using Newtonsoft.Json.Linq;
 
 namespace Common.Application.Services;
 
-public class ImageService : IImageService
+public class UploadImageService : IUploadImageService
 {
     private readonly Cloudinary _cloudinary;
 
-    public ImageService()
+    public UploadImageService()
     {
         string cloudinaryUrl = Environment.GetEnvironmentVariable("CLOUDINARY_URL")?.Trim() 
                             ?? throw new InvalidOperationException("CLOUDINARY_URL environment variable not set");

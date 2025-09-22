@@ -1,6 +1,6 @@
 ﻿namespace Common.Application.Interfaces;
 
-public interface IImageService
+public interface IUploadImageService
 {
     Task<string> UploadImage(FileEntityDto fileEntityDto);
     Task RemoveImage(string imageId);
